@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [Header("# Enemies health infos")]
     [SerializeField] private int startingHealth = 3;
     [SerializeField] private GameObject deathVFXPrefab;
     [SerializeField] private float knockBackThrust = 15f;
