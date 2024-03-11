@@ -166,6 +166,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 22
   particleOnHitPrefabVFX: {fileID: 7882678833386788365, guid: 7c6f3434d256782499bbccc46bdb1b6d, type: 3}
+  isEnemyProjectile: 0
+  projectileRange: 10
 --- !u!96 &4443122471089044048
 TrailRenderer:
   serializedVersion: 3

@@ -5,19 +5,26 @@ using UnityEngine;
 public class PlayerController : Singleton<PlayerController>
 {
     public bool FacingLeft { get { return facingLeft; } }
-
+    // Move
+    [Header("# Move infos")]
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float dashSpeed = 4f;
+    private float startingMoveSpeed;
+    private Vector2 movement;
+
+    // Effect
+    [Header("# Effect infos")]
     [SerializeField] private TrailRenderer myTrailRenderer;
+
+    // eapon
+    [Header("# Weapon infos")]
     [SerializeField] private Transform weaponCollider;
 
     private PlayerControls playerControls;
-    private Vector2 movement;
     private Rigidbody2D rb;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRender;
     private Knockback knockback;
-    private float startingMoveSpeed;
 
     private bool facingLeft = false;
     private bool isDashing = false;
@@ -25,7 +32,9 @@ public class PlayerController : Singleton<PlayerController>
     protected override void Awake() {
         base.Awake();
 
+        // Input
         playerControls = new PlayerControls();
+
         rb = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         mySpriteRender = GetComponent<SpriteRenderer>();
@@ -41,19 +50,23 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void OnEnable() {
+        // Khoi dong input
         playerControls.Enable();
     }
     
     private void OnDisable() {
+        // Dong input
         playerControls.Disable();
     }
 
     private void Update() {
+        // lay input 
         PlayerInput();
     }
 
     private void FixedUpdate() {
         AdjustPlayerFacingDirection();
+        // Movement
         Move();
     }
 
