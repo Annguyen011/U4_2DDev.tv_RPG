@@ -24,7 +24,9 @@ public class Sword : MonoBehaviour, IWeapon
     private void Update() {
         MouseFollowWithOffset();
     }
-
+    /// <summary>
+    /// KHi tan cong
+    /// </summary>
     public void Attack() {
         myAnimator.SetTrigger("Attack");
         weaponCollider.gameObject.SetActive(true);
