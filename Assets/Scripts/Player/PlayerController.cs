@@ -36,6 +36,7 @@ public class PlayerController : Singleton<PlayerController>
         playerControls = new PlayerControls();
 
         rb = GetComponent<Rigidbody2D>();
+        // Animation
         myAnimator = GetComponent<Animator>();
         mySpriteRender = GetComponent<SpriteRenderer>();
         knockback = GetComponent<Knockback>();
@@ -77,6 +78,7 @@ public class PlayerController : Singleton<PlayerController>
     private void PlayerInput() {
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
 
+        // Animation
         myAnimator.SetFloat("moveX", movement.x);
         myAnimator.SetFloat("moveY", movement.y);
     }
