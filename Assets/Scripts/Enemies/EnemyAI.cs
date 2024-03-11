@@ -2,9 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Tao cac trang thai cho enemy
+public enum State
+{
+    Roaming,
+    Attacking
+}
+
 public class EnemyAI : MonoBehaviour
 {
+    // Roam
+    [Header("# Roam infos")]
     [SerializeField] private float roamChangeDirFloat = 2f;
+    private Vector2 roamPosition;
+    private float timeRoaming = 0f;
+
+
     [SerializeField] private float attackRange = 0f;
     [SerializeField] private MonoBehaviour enemyType;
     [SerializeField] private float attackCooldown = 2f;
@@ -12,72 +25,82 @@ public class EnemyAI : MonoBehaviour
 
     private bool canAttack = true;
 
-    private enum State {
-        Roaming, 
-        Attacking
-    }
 
-    private Vector2 roamPosition;
-    private float timeRoaming = 0f;
-    
+
     private State state;
     private EnemyPathfinding enemyPathfinding;
 
-    private void Awake() {
+    private void Awake()
+    {
         enemyPathfinding = GetComponent<EnemyPathfinding>();
-        state = State.Roaming;
     }
 
-    private void Start() {
+    private void Start()
+    {
+        // Dat che do mac dinh la roam
+        state = State.Roaming;
         roamPosition = GetRoamingPosition();
     }
 
-    private void Update() {
+    private void Update()
+    {
+        // Cap nhat state
         MovementStateControl();
     }
 
-    private void MovementStateControl() {
+    private void MovementStateControl()
+    {
         switch (state)
         {
             default:
             case State.Roaming:
                 Roaming();
-            break;
+                break;
 
             case State.Attacking:
                 Attacking();
-            break;
+                break;
         }
     }
 
-    private void Roaming() {
+    private void Roaming()
+    {
+        // THoi gian de roam
         timeRoaming += Time.deltaTime;
 
         enemyPathfinding.MoveTo(roamPosition);
-
-        if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < attackRange) {
+        // NEu trong vun  tan cong thi tan cong
+        if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < attackRange)
+        {
             state = State.Attacking;
         }
-
-        if (timeRoaming > roamChangeDirFloat) {
+        // Tiep tuc roam
+        if (timeRoaming > roamChangeDirFloat)
+        {
             roamPosition = GetRoamingPosition();
         }
     }
 
-    private void Attacking() {
+    private void Attacking()
+    {
+        // Neu ngoai vung tan con thi khong tan cong
         if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > attackRange)
         {
             state = State.Roaming;
         }
-
-        if (attackRange != 0 && canAttack) {
+        // Tan cong
+        if (attackRange != 0 && canAttack)
+        {
 
             canAttack = false;
             (enemyType as IEnemy).Attack();
 
-            if (stopMovingWhileAttacking) {
+            if (stopMovingWhileAttacking)
+            {
                 enemyPathfinding.StopMoving();
-            } else {
+            }
+            else
+            {
                 enemyPathfinding.MoveTo(roamPosition);
             }
 
@@ -85,12 +108,14 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackCooldownRoutine() {
+    private IEnumerator AttackCooldownRoutine()
+    {
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
 
-    private Vector2 GetRoamingPosition() {
+    private Vector2 GetRoamingPosition()
+    {
         timeRoaming = 0f;
         return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     }
